@@ -5,21 +5,21 @@
 \title{PolarCoordHeterPlot.}
 \usage{
 PolarCoordHeterPlot(
-  foo = foo,
-  gt = c("B73", "B73xMo17", "Mo17"),
-  use_exp = TRUE,
-  exp_fac = 0.45,
+  x,
+  gt = c("P1", "P1xP2", "P2"),
+  rev_log = NULL,
+  exp_fac = 1,
   thr = 1,
   plot_lab = c("none", "text", "graph"),
   col = NULL
 )
 }
 \arguments{
-\item{foo}{Data matrix with measurement values (traits in rows and genotypes in columns).}
+\item{x}{Data matrix with measurement values (traits in rows and genotypes in columns).}
 
-\item{gt}{Character vector of length=3 indicating P1, F and P2 to be filtered by column name from foo.}
+\item{gt}{Character vector of length=3 indicating P1, F and P2. These are used to  filter by column name from x.}
 
-\item{use_exp}{.}
+\item{rev_log}{If you've log transformed your data, you might want to revert the log transformation.}
 
 \item{exp_fac}{Expansion factor to increase figure size.}
 
@@ -27,7 +27,7 @@ PolarCoordHeterPlot(
 
 \item{plot_lab}{Show 'text' or 'graph' style labels of the polar sections (or kepp 'none' to omit).}
 
-\item{col}{Provide a color vector of length nrow(foo).}
+\item{col}{Provide a color vector of length nrow(x).}
 }
 \value{
 Will generate a plot in polar coordinates and return the x/y coordinates of the data points invisibly.
@@ -45,13 +45,18 @@ See examples.
 \examples{
 gt <- c("P1","P1xP2","P2")
 set.seed(0)
-foo <- matrix(rnorm(150), nrow = 10, dimnames = list(paste0("M",1:10), sample(rep(gt, 5))))
-foo[1:4,1:6]
-PolarCoordHeterPlot(foo=foo, gt=gt, exp_fac=1)
-PolarCoordHeterPlot(foo=foo, gt=gt, plot_lab="text")
-PolarCoordHeterPlot(foo=foo, gt=c("P2","P1xP2","P1"), plot_lab="text")
-PolarCoordHeterPlot(foo=foo, gt=c("P2","P1xP2","P1"), plot_lab="graph")
-PolarCoordHeterPlot(foo=foo, gt=gt, exp_fac=1, col=1:10)
-PolarCoordHeterPlot(foo=foo, gt=gt, exp_fac=1, col=1:10, thr=0.5)
-PolarCoordHeterPlot(foo=foo, gt=gt, plot_lab="graph", exp_fac=1, col=1:10, thr=0.5)
+x <- matrix(rnorm(150), nrow = 10, dimnames = list(paste0("M",1:10), sample(rep(gt, 5))))
+x[1:4,1:6]
+PolarCoordHeterPlot(x=x, gt=gt)
+# using text style labels for the sections
+PolarCoordHeterPlot(x=x, gt=gt, plot_lab="text", exp_fac=0.75)
+# reverting the order of parental genotypes
+PolarCoordHeterPlot(x=x, gt=c("P2","P1xP2","P1"), plot_lab="text", exp_fac=0.75)
+# using graph style labels for the sections
+PolarCoordHeterPlot(x=x, gt=c("P2","P1xP2","P1"), plot_lab="graph")
+# coloring data points
+PolarCoordHeterPlot(x=x, gt=gt, col=1:10)
+# applying ANOVA P value threshold to input rows
+PolarCoordHeterPlot(x=x, gt=gt, col=1:10, thr=0.5)
+PolarCoordHeterPlot(x=x, gt=gt, plot_lab="graph", col=1:10, thr=0.5)
 }
