@@ -14,6 +14,14 @@
 #' @param col Provide a color vector of length nrow(x).
 #' @return Will generate a plot in polar coordinates and return the x/y coordinates of the data points invisibly.
 #' @examples
+#' # using the provided experimental data
+#' raw <- MetabolomicsBasics::raw
+#' sam <- MetabolomicsBasics::sam
+#' x <- t(raw)
+#' colnames(x) <- sam$GT
+#' PolarCoordHeterPlot(x=x, gt=c("B73","B73xMo17","Mo17"), plot_lab="graph", col=1:10, thr=0.5, rev_log=exp(1))
+#'
+#' # using random data
 #' gt <- c("P1","P1xP2","P2")
 #' set.seed(0)
 #' x <- matrix(rnorm(150), nrow = 10, dimnames = list(paste0("M",1:10), sample(rep(gt, 5))))
@@ -31,8 +39,8 @@
 #' PolarCoordHeterPlot(x=x, gt=gt, col=1:10, thr=0.5)
 #' PolarCoordHeterPlot(x=x, gt=gt, plot_lab="graph", col=1:10, thr=0.5)
 #' @export
-#' @importFrom graphics points axTicks rect
-
+#' @importFrom graphics points
+#' @importFrom stats anova lm
 PolarCoordHeterPlot <- function(
     x,
     gt = c("P1", "P1xP2", "P2"),
@@ -48,7 +56,11 @@ PolarCoordHeterPlot <- function(
   if (is.null(col)) {
     col <- rep(0, nrow(x))
   } else {
-    stopifnot(length(col)==nrow(x))
+    col <- as.vector(col)
+    if (length(col)!=nrow(x)) {
+      message("Parameter 'col' should be a color vector of length nrow(x)")
+      col <- rep(col, length.out=nrow(x))
+    }
   }
 
   opar <- par(no.readonly = TRUE)

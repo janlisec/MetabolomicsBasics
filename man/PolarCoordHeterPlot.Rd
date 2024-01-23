@@ -43,6 +43,14 @@ Will generate a plot in polar coordinates and return the x/y coordinates of the 
 See examples.
 }
 \examples{
+# using the provided experimental data
+raw <- MetabolomicsBasics::raw
+sam <- MetabolomicsBasics::sam
+x <- t(raw)
+colnames(x) <- sam$GT
+PolarCoordHeterPlot(x=x, gt=c("B73","B73xMo17","Mo17"), plot_lab="graph", col=1:10, thr=0.5, rev_log=exp(1))
+
+# using random data
 gt <- c("P1","P1xP2","P2")
 set.seed(0)
 x <- matrix(rnorm(150), nrow = 10, dimnames = list(paste0("M",1:10), sample(rep(gt, 5))))
