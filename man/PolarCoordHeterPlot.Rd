@@ -25,7 +25,7 @@ PolarCoordHeterPlot(
 
 \item{thr}{Alpha level used in ANOVA to filter insignificant rows. Keep thr=1 to include all matrix rows.}
 
-\item{plot_lab}{Show 'text' or 'graph' style labels of the polar sections (or kepp 'none' to omit).}
+\item{plot_lab}{Show 'text' or 'graph' style labels of the polar sections (or keep 'none' to omit).}
 
 \item{col}{Provide a color vector of length nrow(x).}
 }
@@ -48,8 +48,11 @@ raw <- MetabolomicsBasics::raw
 sam <- MetabolomicsBasics::sam
 x <- t(raw)
 colnames(x) <- sam$GT
-PolarCoordHeterPlot(x=x, gt=c("B73","B73xMo17","Mo17"), plot_lab="graph", col=1:10, thr=0.5, rev_log=exp(1))
+gt <- c("B73","B73xMo17","Mo17")
+PolarCoordHeterPlot(x=x, gt=gt, plot_lab="graph", thr=0.01, rev_log=exp(1))
 
+coord <- PolarCoordHeterPlot(x=x, gt=gt, thr=0.01, rev_log=exp(1))
+points(x=coord$x[3], coord$y[3], pch=22, cex=4, col=2)
 # using random data
 gt <- c("P1","P1xP2","P2")
 set.seed(0)

@@ -10,7 +10,7 @@
 #' @param rev_log If you've log transformed your data, you might want to revert the log transformation.
 #' @param exp_fac Expansion factor to increase figure size.
 #' @param thr Alpha level used in ANOVA to filter insignificant rows. Keep thr=1 to include all matrix rows.
-#' @param plot_lab Show 'text' or 'graph' style labels of the polar sections (or kepp 'none' to omit).
+#' @param plot_lab Show 'text' or 'graph' style labels of the polar sections (or keep 'none' to omit).
 #' @param col Provide a color vector of length nrow(x).
 #' @return Will generate a plot in polar coordinates and return the x/y coordinates of the data points invisibly.
 #' @examples
@@ -19,8 +19,11 @@
 #' sam <- MetabolomicsBasics::sam
 #' x <- t(raw)
 #' colnames(x) <- sam$GT
-#' PolarCoordHeterPlot(x=x, gt=c("B73","B73xMo17","Mo17"), plot_lab="graph", col=1:10, thr=0.5, rev_log=exp(1))
+#' gt <- c("B73","B73xMo17","Mo17")
+#' PolarCoordHeterPlot(x=x, gt=gt, plot_lab="graph", thr=0.01, rev_log=exp(1))
 #'
+#' coord <- PolarCoordHeterPlot(x=x, gt=gt, thr=0.01, rev_log=exp(1))
+#' points(x=coord$x[3], coord$y[3], pch=22, cex=4, col=2)
 #' # using random data
 #' gt <- c("P1","P1xP2","P2")
 #' set.seed(0)
@@ -199,9 +202,3 @@ PolarCoordHeterPlot <- function(
   invisible(out)
 
 }
-
-
-
-
-
-
