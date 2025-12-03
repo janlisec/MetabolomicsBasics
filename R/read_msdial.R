@@ -27,7 +27,7 @@ read_msdial <- function(file, sam = NULL) {
   rownames(sam) <- sam[,"ID"]
 
   # extract metabolite and raw data information
-  x <- read.table(file, sep="\t", header=T, as.is=T, quote="", comment.char = "", skip=4, check.names = FALSE)
+  x <- utils::read.table(file, sep="\t", header=T, as.is=T, quote="", comment.char = "", skip=4, check.names = FALSE)
   met <- x[,1:(min(which(colnames(x) %in% sam[,"File"]))-1)]
   colnames(met)[2:4] <- c("rt", "mz", "name")
   met$mz <- round(met$mz, 4)

@@ -1,18 +1,22 @@
 #' @title MS2ExclusionList.
 #' @description \code{MS2ExclusionList} will compute an exclusion list for MS2
-#'     experiments bas3ed on an mzML file.
+#'     experiments based on an mzML file.
 #' @param x A wiff file converted to mzML and imported by xcmsRaw.
 #' @param ms2_previous A two column data.frame containing exclusion peaks from previous measurements or known contaminants.
 #' @return A two column data.frame that can be written to txt and imported in Sciex-Analyst Software.
-#' @export
+#' @noRd
+#' @keywords internal
 #' @examples
 #' # example code
 #' \dontrun{
 #' fl <- paste0("C:/Users/jlisec/Documents/", c("B1-7-B34.wiff","Blank1_1.wiff")[2])
-#' msc_exe <- "C:/Users/jlisec/SoftwareLokal/pwiz-bin-windows-x86_64-vc143-release-3_0_23306_2250ca7.tar/pwiz-bin-windows-x86_64-vc143-release-3_0_23306_2250ca7/msconvert.exe"
+#' msc_exe <- paste0("C:/Users/jlisec/SoftwareLokal/",
+#'   "pwiz-bin-windows-x86_64-vc143-release-3_0_23306_2250ca7.tar/",
+#'   "pwiz-bin-windows-x86_64-vc143-release-3_0_23306_2250ca7/msconvert.exe")
 #' msconvert(files = fl, msc_exe = msc_exe, out_path = "C:/Users/jlisec/Documents", args = "sciex_MS2")
 #' x <- xcms::xcmsRaw(filename = gsub("wiff", "mzML", basename(fl)), profstep = 0, includeMSn = TRUE)
-#' y <- xcms::xcmsRaw(filename = "C:/Users/jlisec/Documents/B1-7-B34.mzML", profstep = 0, includeMSn = TRUE)
+#' tmp.mzML <- "C:/Users/jlisec/Documents/B1-7-B34.mzML"
+#' y <- xcms::xcmsRaw(filename = tmp.mzML, profstep = 0, includeMSn = TRUE)
 #' el_blank <- MS2ExclusionList(x)
 #' el_sample <- MS2ExclusionList(y)
 #' }
@@ -64,7 +68,7 @@ MS2ExclusionList <- function(
   # for (i in which(!flt)[order(ms2_fl[!flt,2])]){
   temp_file <- tempfile(pattern = paste(tools::file_path_sans_ext(as.character(x@filepath)), "cont_", sep="_"), fileext = ".pdf")
   if (any(flt)) {
-    pdf(temp_file)
+    grDevices::pdf(temp_file)
       for (i in which(flt)[order(ms2_fl[flt,2])]) {
         mz <- ms2_fl[i,1]
         rt <- ms2_fl[i,2]*60
@@ -82,7 +86,7 @@ MS2ExclusionList <- function(
         check_mz <- scan_mz[scan_mz[,2]>=scan_int_lim,1]
         HiResTEC::plotBPC(bpc = list(HiResTEC::getMultipleBPC(x = x, mz = check_mz, mz_dev = mz_dev, rt = rt, rt_dev=20, smooth = 5)), ids = i, ann = "mz")
       }
-    dev.off()
+    grDevices::dev.off()
 
     # Öffne die PDF-Datei mit dem Standardprogramm
     if (.Platform$OS.type == "windows") {
@@ -96,7 +100,7 @@ MS2ExclusionList <- function(
 
   temp_file2 <- tempfile(pattern = paste(tools::file_path_sans_ext(as.character(x@filepath)), "good_", sep="_"), fileext = ".pdf")
   if (any(!flt)) {
-    pdf(temp_file2)
+    grDevices::pdf(temp_file2)
     for (i in which(!flt)[order(ms2_fl[!flt,2])]) {
       mz <- ms2_fl[i,1]
       rt <- ms2_fl[i,2]*60
@@ -114,7 +118,7 @@ MS2ExclusionList <- function(
       check_mz <- scan_mz[scan_mz[,2]>=scan_int_lim,1]
       HiResTEC::plotBPC(bpc = list(HiResTEC::getMultipleBPC(x = x, mz = check_mz, mz_dev = mz_dev, rt = rt, rt_dev=20, smooth = 5)), ids = i, ann = "mz")
     }
-    dev.off()
+    grDevices::dev.off()
 
     # Öffne die PDF-Datei mit dem Standardprogramm
     if (.Platform$OS.type == "windows") {
