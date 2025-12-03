@@ -1,11 +1,10 @@
 #' @title verify_suggested.
 #' @description Check if packages are available and stop function otherwise.
 #' @param pkg Package names to be checked.
-#' @param default A default return value might be passed to the function for the case of missing packages.
-#' @return NULL.
+#' @return TRUE if everything is installed, FALSE (and a warning) otherwise.
 #' @keywords internal
 #' @noRd
-verify_suggested <- function(pkg, default = NULL) {
+verify_suggested <- function(pkg) {
   # verify that suggested packages are available
   check_pkg <- sapply(pkg, requireNamespace, quietly = TRUE)
   if (!all(check_pkg)) {
@@ -14,7 +13,7 @@ verify_suggested <- function(pkg, default = NULL) {
       paste(names(check_pkg)[!check_pkg], collapse=", "),
       ". Please install."
     ))
-    invisible(default)
+    invisible(FALSE)
   }
-  invisible(NULL)
+  invisible(TRUE)
 }
