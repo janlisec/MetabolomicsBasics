@@ -34,7 +34,7 @@
 #' @importFrom utils flush.console
 ReplaceMissingValues <- function(x, ncomp = 10, silent = FALSE) {
   # use packages conditional
-  if (!(verify_suggested("mixOmics"))) return(x)
+  if (!verify_suggested("mixOmics")) return(x)
   if (!silent) cat(paste("\n...replacing missing values in a data matrix of m x n = ", nrow(x), " x ", ncol(x), "(=", prod(dim(x)), ")", sep = ""))
   flush.console()
   # !![20210416] mixOmics changed the code of nipals removing the parameter 'reconst'

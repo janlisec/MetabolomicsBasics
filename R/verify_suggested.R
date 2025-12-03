@@ -13,7 +13,7 @@ verify_suggested <- function(pkg) {
       paste(names(check_pkg)[!check_pkg], collapse=", "),
       ". Please install."
     ))
-    invisible(FALSE)
+    return(FALSE)
   }
-  invisible(TRUE)
+  return(TRUE)
 }
